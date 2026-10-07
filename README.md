@@ -111,6 +111,17 @@ The bundled `vhidflt.sys` is the WHQL-signed *Virtual HID Provider — HIDClass 
 
 [`75861fae-...9036634770.cab`](https://catalog.s.download.windowsupdate.com/d/msdownload/update/driver/drvs/2024/05/75861fae-a035-43ab-90eb-887f3b81f87c_a4dfc2cd21c4b831e22d64d959c5099036634770.cab)
 
+| Field | Value |
+|---|---|
+| **Submitter** | Shenzhen Xinyao Technology Co., Ltd. (深圳市新耀科技有限公司) |
+| **Catalog ID** | `186be5e8-88b4-494b-af7c-29650395ffa6` |
+| **Published** | 2021-11-03 |
+| **Hardware IDs** | `USB\VID_1A2C&PID_2024&MI_{00,01,02}` — composite HID (kbd + mouse + consumer) |
+| **Signer** | Microsoft Windows Hardware Compatibility Publisher (WHQL re-sign) |
+| **Original code** | Microsoft WDK `vhidmini` sample — ships with the DDK's default `Windows (R) Win 7 DDK provider` version strings, unchanged |
+
+A small Shenzhen peripheral OEM compiled the Microsoft HID minidriver sample as-is, submitted it through Partner Dashboard for a cheap USB keyboard/mouse combo, and got it WHQL-signed. The resulting binary is still on Windows Update, loadable on any machine via `pnputil` — no physical device required.
+
 Not hand-picked: pulled, triaged, and promoted to confirmed-target status by [`dzn0/hid-driver-triage`](https://github.com/dzn0/hid-driver-triage). Full per-criterion verdict under its `reports/c8819dbd...414de9f5c/` folder.
 
 ## License & Disclaimer
