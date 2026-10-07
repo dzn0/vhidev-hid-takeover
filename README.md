@@ -16,6 +16,8 @@
 
 > **Research use only.** This is a proof-of-concept for security research and education. The author is not responsible for any misuse of this software.
 
+> **How this driver was found:** surfaced by [`dzn0/hid-collect`](https://github.com/dzn0/hid-collect), an LLM-operated research pipeline that collects Windows HID kernel drivers from public catalogs and drives candidates through a six-criterion static + dynamic validation. `vhidev.sys` is its first confirmed target.
+
 ## What Is This?
 
 **vhidev-hid-takeover** is a proof-of-concept that demonstrates a Windows input takeover attack using a kernel-mode virtual HID (Human Interface Device) driver. A single unprivileged-looking executable installs a signed-format driver into the HID stack, then injects keyboard, mouse, media, and system control events that are **indistinguishable from real hardware** to the operating system, applications, and anti-cheat engines.
@@ -215,6 +217,8 @@ vhidev-hid-takeover/
 The bundled `vhidflt.sys` is the WHQL-signed *Virtual HID Provider - HIDClass - 18.13.46.429* package, unmodified from the Microsoft Update Catalog:
 
 [`75861fae-...9036634770.cab`](https://catalog.s.download.windowsupdate.com/d/msdownload/update/driver/drvs/2024/05/75861fae-a035-43ab-90eb-887f3b81f87c_a4dfc2cd21c4b831e22d64d959c5099036634770.cab)
+
+The driver was not hand-picked: it was pulled, triaged, and promoted to confirmed-target status by [`dzn0/hid-collect`](https://github.com/dzn0/hid-collect), an LLM-operated research pipeline for finding Windows HID drivers that expose user-mode-reachable input injection. The full per-criterion verdict and the `dynamic.ps1` that reproduces this result live under its `reports/c8819dbd...414de9f5c/` folder.
 
 ## License
 
