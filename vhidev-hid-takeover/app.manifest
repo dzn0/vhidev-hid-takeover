@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<!--
+  app.manifest - embedded into vhidev-hid-takeover.exe at link time.
+
+  requireAdministrator: double-clicking the exe triggers UAC, so the user gets
+  the elevation prompt immediately instead of launching unprivileged and
+  failing at the is_elevated() check.
+
+  uiAccess=false: standard behavior; this is not an accessibility tool.
+
+  longPathAware: lets Win32 APIs handle paths > MAX_PATH when the OS allows.
+  Not strictly required, but harmless and future-proof.
+-->
+<assembly xmlns="urn:schemas-microsoft-com:asm.v1" manifestVersion="1.0">
+
+  <trustInfo xmlns="urn:schemas-microsoft-com:asm.v3">
+    <security>
+      <requestedPrivileges>
+        <requestedExecutionLevel level="requireAdministrator" uiAccess="false" />
+      </requestedPrivileges>
+    </security>
+  </trustInfo>
+
+  <!-- Declare support for modern Windows versions so GetVersionEx and
+       IsWindows*OrGreater behave as expected. -->
+  <compatibility xmlns="urn:schemas-microsoft-com:compatibility.v1">
+    <application>
+      <!-- Windows 10 / 11 -->
+      <supportedOS Id="{8e0f7a12-bfb3-4fe8-b9a5-48fd50a15a9a}"/>
+      <!-- Windows 8.1 -->
+      <supportedOS Id="{1f676c76-80e1-4239-95bb-83d0f6d0da78}"/>
+    </application>
+  </compatibility>
+
+  <application xmlns="urn:schemas-microsoft-com:asm.v3">
+    <windowsSettings>
+      <longPathAware xmlns="http://schemas.microsoft.com/SMI/2016/WindowsSettings">true</longPathAware>
+    </windowsSettings>
+  </application>
+
+</assembly>
