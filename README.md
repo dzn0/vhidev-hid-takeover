@@ -61,12 +61,7 @@ The injected input travels through the same kernel path as a physical USB keyboa
 - Arbitrary string typing with ASCII-to-HID-usage mapping
 - Press, hold, and release with per-key precision
 
-```c
-/* Press Ctrl+Shift+Esc (open Task Manager) and release. */
-uint8_t esc = 0x29;
-hid_send_keyboard(h, HID_MOD_LCTRL | HID_MOD_LSHIFT, &esc, 1);
-hid_send_keyboard(h, 0, NULL, 0);  /* release everything */
-```
+![keyboard example](docs/images/cap_keyboard.png)
 
 ### Mouse
 - Relative X/Y movement (int8 per axis per report)
@@ -74,34 +69,21 @@ hid_send_keyboard(h, 0, NULL, 0);  /* release everything */
 - Scroll wheel (up/down)
 - Click-and-drag patterns
 
-```c
-/* Move cursor 50 pixels right and click. */
-hid_send_mouse(h, 50, 0, 0,               0);  /* X+50 */
-hid_send_mouse(h, 0,  0, HID_BTN_LEFT,    0);  /* button down */
-hid_send_mouse(h, 0,  0, 0,               0);  /* button up   */
-```
+![mouse example](docs/images/cap_mouse.png)
 
 ### Consumer Control (Media Keys)
 - Volume up / down / mute
 - Play / pause, next track, previous track
 - **Application launch** (e.g. Calculator via usage `0x0192`)
 
-```c
-/* Open Calculator via the AL Consumer Control Config usage. */
-hid_send_consumer(h, HID_CC_AL_CALC);
-hid_send_consumer(h, 0);  /* release */
-```
+![consumer example](docs/images/cap_consumer.png)
 
 ### System Control
 - **Sleep** the machine
 - **Power down** (shutdown) the machine
 - Wake from standby
 
-```c
-/* Put the machine to sleep. */
-hid_send_system(h, HID_SC_SLEEP);
-hid_send_system(h, 0);  /* release */
-```
+![system example](docs/images/cap_system.png)
 
 ## The Vulnerability
 
@@ -119,23 +101,7 @@ This PoC highlights a fundamental weakness in the Windows HID input model:
 
 ### Attack surface
 
-```
-Attacker (admin, once)           Attacker (any user, forever)
-        |                                   |
-        v                                   v
- [install vhidflt.sys]            [open COL05 handle]
- [create root\vhidev]             [WriteFile 64-byte reports]
-        |                                   |
-        +-----------------------------------+
-                        |
-                        v
-              Windows HID subsystem
-              (trusts all reports equally)
-                        |
-                        v
-              Target machine fully controlled
-              keyboard + mouse + media + power
-```
+![attack surface](docs/images/attack.png)
 
 ### Why this matters
 
@@ -162,24 +128,7 @@ Ensure `resource/vhidflt.sys` and `resource/vhidflt.inf` are next to the built e
 3. Select an action from the menu:
 ```
 
-```
-=== HID Takeover - Action Menu ===
-
-[1]  Mouse: trace a square
-[2]  Mouse: left click (3 s warning)
-[3]  Mouse: right click (3 s warning)
-[4]  Mouse: scroll down x 5
-[5]  Mouse: scroll up x 5
-[6]  Keyboard: type 'hello from vhidev' (3 s warning)
-[7]  Consumer: volume up x 5
-[8]  Consumer: volume down x 5
-[9]  Consumer: mute toggle
-[10] Consumer: media play/pause
-[11] Consumer: launch Calculator
-[12] System: sleep (5 s warning)
-[13] System: power down (5 s warning)
-[0]  Exit
-```
+![action menu](docs/images/terminal.png)
 
 ## Cleanup
 
@@ -194,23 +143,7 @@ pnputil /delete-driver oem<N>.inf /uninstall /force
 
 ## Project Structure
 
-```
-vhidev-hid-takeover/
-  header/
-    common.h        - log macros, elevation check, shared types
-    hid.h           - HID report protocol, constants, sender API
-    install.h       - driver install/uninstall interface
-    ui.h            - console menu loop
-  source/
-    main.c          - entry point: elevate -> install -> open -> menu
-    common.c        - pause_exit, is_elevated
-    hid.c           - COL05 discovery, report construction, WriteFile
-    install.c       - SetupAPI devnode creation, driver binding
-    ui.c            - action handlers, ASCII-to-HID mapper, menu
-  resource/
-    vhidflt.sys     - the kernel-mode KMDF virtual HID filter driver
-    vhidflt.inf     - INF for driver installation (HIDClass)
-```
+![project structure](docs/images/tree.png)
 
 ## Driver Provenance
 
