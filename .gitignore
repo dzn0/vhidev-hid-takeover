@@ -1,0 +1,43 @@
+# ===== Visual Studio IDE state =====
+# Local-only index/cache; VS holds exclusive locks on files here while open,
+# which is what caused the `.vsidx` permission-denied error on `git add`.
+.vs/
+
+# Per-user project settings (window layout, startup project, etc.)
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# ===== MSBuild / cl.exe build outputs =====
+# Default MSBuild output directories.
+[Bb]in/
+[Oo]bj/
+[Dd]ebug/
+[Rr]elease/
+x64/
+x86/
+ARM/
+ARM64/
+Win32/
+
+# Intermediate and generated artifacts.
+*.obj
+*.pdb
+*.ilk
+*.exp
+*.lib
+*.pch
+*.ipdb
+*.iobj
+*.idb
+*.tlog
+*.lastbuildstate
+*.manifest.res
+*.aps
+
+# ===== Platform / editor noise =====
+Thumbs.db
+Desktop.ini
+*.swp
+.DS_Store
